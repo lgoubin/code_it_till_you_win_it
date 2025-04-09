@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game-container {
+    display: flex;
+}
+
+#editor {
+    width: 50%;
+    height: 100%;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ccc;
+}
+
+#terminal {
+    width: 50%;
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    font-family: monospace;
+}
