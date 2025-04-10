@@ -1,6 +1,7 @@
-import { EditorView, basicSetup } from "https://esm.sh/@codemirror/basic-setup@0.20.0";
-import { python } from "https://esm.sh/@codemirror/lang-python";
-import { Terminal } from "https://esm.sh/xterm";
+import { basicSetup } from "codemirror";
+import { EditorView } from "@codemirror/view";
+import { python } from "@codemirror/lang-python";
+import { Terminal } from "xterm";
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -12,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const editor = new EditorView({
-        doc: '# Écrivez votre code ici...\nprint("Hello, world!")',
-        extensions: [basicSetup, python()],
+  const editor = new EditorView({
+    doc: '# Écrivez votre code ici...\nprint("Hello, world!")',
+    extensions: [basicSetup, python()],
         parent: editorContainer
-    });
+  });
 
     const terminal = new Terminal({
         theme: {
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function initializePyodide() {
         console.log("Début du chargement de Pyodide...");
         try {
-            const pyodide = await loadPyodide();
+  const pyodide = await loadPyodide();
             console.log("Pyodide chargé avec succès !");
             return pyodide;
         } catch (error) {
@@ -59,12 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function executePythonCode(pyodide, code, terminal) {
-        try {
-            const result = await pyodide.runPythonAsync(code);
+    try {
+      const result = await pyodide.runPythonAsync(code);
             terminal.write(`Résultat : ${result}\r\n`);
         } catch (error) {
             terminal.write(`Erreur : ${error.message}\r\n`);
-        }
+    }
     }
 
     document.getElementById("run-button").addEventListener("click", async () => {
