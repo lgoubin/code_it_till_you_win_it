@@ -1,26 +1,14 @@
+import { CHARACTERS } from './constants.js';
+
 export class Snake {
-    //enum spécifiant les caractères représentant le serpent
-    static CHARACTERS = {
-        HEAD: '$',
-        BODY: '#',
-        TAIL: '+'
-    };
-
-    static DIRECTIONS = {
-        E : { x: 1, y: 0 },
-        W : { x: -1, y: 0 },
-        N : { x: 0, y: -1 },
-        S: { x: 0, y: 1 }
-    }
-
     constructor(gridSize) {
         this.gridSize = gridSize;
         this.body = [{ x: 5, y: 5 }];
         this.direction = { x: 0, y: 1 };
         this.length = 1;
-        this.headCharacter = Snake.CHARACTERS.HEAD;
-        this.bodyCharacter = Snake.CHARACTERS.BODY;
-        this.tailCharacter = Snake.CHARACTERS.TAIL;
+        this.headCharacter = CHARACTERS.HEAD;
+        this.bodyCharacter = CHARACTERS.BODY;
+        this.tailCharacter = CHARACTERS.TAIL;
     }
     
     move(direction, grow = false) {

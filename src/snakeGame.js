@@ -1,4 +1,6 @@
 import { Snake } from './snake';
+import { CHARACTERS } from './constants.js';
+import { DIRECTIONS } from './constants.js';
 
 export class SnakeGame {
     constructor(gridSize) {
@@ -19,13 +21,13 @@ export class SnakeGame {
     // Déplacer le serpent et vérifier si il mange une pomme
     moveSnake(direction) {
         const head = {
-            x: this.snake.body[0].x + Snake.DIRECTIONS[direction].x,
-            y: this.snake.body[0].y + Snake.DIRECTIONS[direction].y
+            x: this.snake.body[0].x + DIRECTIONS[direction].x,
+            y: this.snake.body[0].y + DIRECTIONS[direction].y
         };
         
         const willEatApple = (head.x === this.apple.x && head.y === this.apple.y);
         
-        if (!this.snake.move(Snake.DIRECTIONS[direction], willEatApple)) {
+        if (!this.snake.move(DIRECTIONS[direction], willEatApple)) {
             return false;
         }
         
@@ -39,26 +41,26 @@ export class SnakeGame {
 
     // Afficher le jeu dans le terminal
     render() {
-        let grid = Array(this.gridSize.height).fill().map(() => Array(this.gridSize.width).fill('·'));
+        let grid = Array(this.gridSize.height).fill().map(() => Array(this.gridSize.width).fill(CHARACTERS.EMPTY));
 
         // Affichage du serpent
         this.snake.body.forEach((segment, index) => {
-            const char = index === 0 ? this.snake.headCharacter : index === this.snake.body.length - 1 ? this.snake.tailCharacter : this.snake.bodyCharacter;
+            const char = index === 0 ? CHARACTERS.HEAD : index === this.snake.body.length - 1 ? CHARACTERS.TAIL : CHARACTERS.BODY;
             grid[segment.y][segment.x] = char;
         });
 
         // Affichage de la pomme
-        grid[this.apple.y][this.apple.x] = '@';
+        grid[this.apple.y][this.apple.x] = CHARACTERS.APPLE;
 
         // Affichage de la grille avec bordures *
         let output = '';
-        output += '*'.repeat(this.gridSize.width+2) + '\r\n';
+        output += CHARACTERS.WALL.repeat(this.gridSize.width+2) + '\r\n';
         for (let row = 0; row < this.gridSize.height; row++) {
-                output += '*' + grid[row].join('') + '*' + '\r\n';
+                output += CHARACTERS.WALL + grid[row].join('') + CHARACTERS.WALL + '\r\n';
         }
-        output += '*'.repeat(this.gridSize.width+2) + '\r\n';
+        output += CHARACTERS.WALL.repeat(this.gridSize.width+2) + '\r\n';
 
-        return(output);
+        return output;
     }
 
     reset() {
