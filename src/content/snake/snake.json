@@ -1,0 +1,66 @@
+{
+    "title": "Snake",
+    "introduction" : "Snake est un jeu classique, où le joueur contrôle un serpent qui grandit en mangeant de la nourriture. Le but est d'éviter de se heurter aux murs ou à soi-même. Au cours de ce parcours, vous allez pouvoir mettre en place des stratégies de plus en plus complexes afin de tenter de réaliser le meilleur score possible. Vous allez également découvrir comment utiliser des algorithmes de recherche pour améliorer votre jeu.",
+    "gameType": "SnakeGame",    
+    "levels": [
+        {
+            "id": 1,
+            "title": "Premiers pas",
+            "instructions": "Fais avancer le serpent d’une case.",
+            "starterCode": "def nextMove(): \n    direction = 'N' \n    return direction",
+            "validatorCode": "hasMoved",
+            "gameConfig": {
+                "gridSize": { "width": 20, "height": 10 },
+                "initialSnake": [{ "x": 5, "y": 5 }]
+            },
+            "popup": "Bien joué, on sait faire bouger le serpent ! \n Le risque à présent est de foncer dans un mur ou de se cogner contre lui-même. \n On va donc devoir réfléchir à la direction à prendre pour éviter cela."
+        },
+        {
+            "id": 2,
+            "title": "Évite la mort",
+            "instructions": "Dans ce niveau, le serpent ne cherche pas la pomme, juste à rester en vie. Fais en sorte qu’il ne se cogne pas contre un mur ou contre lui-même.",
+            "starterCode": "def nextMove(): \n    direction = 'E' \n    return direction",
+            "validatorCode": "isBlocked",
+            "gameConfig": {
+                "gridSize": { "width": 20, "height": 10 },
+                "initialSnake": [{ "x": 5, "y": 5 }]
+            },
+            "popup": "Bravo, le serpent sait éviter les murs !\n Mais il commence à avoir faim ! \n Il va falloir lui apprendre à chercher la nourriture."
+        },
+        {
+            "id": 3,
+            "title": "Collecte de nourriture",
+            "instructions": "Le serpent commence à avoir faim ! Guide le vers la pomme en tentant de le garder en vie.",
+            "starterCode": "def nextMove(): \n    direction = 'S' \n    return direction",
+            "validatorCode": "hasEaten",
+            "gameConfig": {
+                "gridSize": { "width": 20, "height": 10 },
+                "initialSnake": [{ "x": 5, "y": 5 }]
+            },
+            "popup": "Super ! Le serpent a bien mangé ! Ce qui l'a tellement fait grandir qu'il s'est cogné contre lui-même ! \n Afin d'éviter cela, on peut essayer de faire en sorte qu'il emplisse autant d'espace sur le plateau que possible. \n Pour cela, nous allons mettre en place un algorithme dit 'Cycle Hamiltonien' ou A* : le serpent doit se déplacer de manière à visiter chaque case du plateau avant de revenir à sa position initiale. \n Nécessairement, au cours d'un cycle, il aura mangé au moins une pomme. \n Il doit évidemment continuer à éviter les murs."
+        },
+        {
+            "id": 4,
+            "title": "Cycle hamiltonien",
+            "instructions": "Le serpent doit se déplacer de manière à visiter chaque case du plateau avant de revenir à sa position initiale. Il doit éviter de se croiser lui-même.",
+            "starterCode": "def nextMove(): \n    direction = 'W' \n    return direction",
+            "validatorCode": "hasCompletedHamiltonienCycle",
+            "gameConfig": {
+                "gridSize": { "width": 20, "height": 10 },
+                "initialSnake": [{ "x": 5, "y": 5 }]
+            },
+            "popup": "C'est gagné !\nOn a réussi à manger tellement de pommes que le serpent rempli tout l'espace du plateau !\nC'était un peu long et ennuyant cependant...\nPourrions-nous rendre ce serpent un peu plus \"intelligent\" ? "
+        },
+        {
+            "id": 5,
+            "title": "Recherche du meilleur chemin",
+            "instructions": "Gagnons un peu de temps ! Allons manger la pomme tant que cela ne nous met pas en danger, et utilisons un chemin plus long pour se mettre en sécurité quand un dangr est détecté.",
+            "starterCode": "def nextMove(): \n    direction = 'N' \n    return direction",
+            "validatorCode": "hasFoundShortestPath",
+            "gameConfig": {
+                "gridSize": { "width": 20, "height": 10 },
+                "initialSnake": [{ "x": 5, "y": 5 }]
+            }
+        }
+    ]
+}

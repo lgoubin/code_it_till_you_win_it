@@ -1,12 +1,12 @@
-import { resizeTerminal, updateLevelDisplay as updateGameDisplay, resetGameContainer,
-         updateTerminal, initializePyodide, executePythonCode, terminalConfig } from './utils.js';
+import { resizeTerminal, updateGameDisplay, resetGameContainer, runLevel,
+         updateTerminal, initializePyodide, terminalConfig } from './utils.js';
 import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
 import { python } from "@codemirror/lang-python";
 import { indentWithTab } from "@codemirror/commands";
 import { Terminal } from "xterm";
 import { LearningGame } from './learningGame.js';
-import snakeData from './content/snake.json';
+import snakeData from './content/snake/snake.json';
 
 const learningGame = new LearningGame(snakeData);
 const game = learningGame.game;
@@ -26,16 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };    
 
     const editor = new EditorView({
-        doc: learningGame.currentLevel.presetCode,
+        doc: learningGame.currentLevel.starterCode,
         extensions: [basicSetup, python(), keymap.of([indentWithTab])],
         parent: ui.editorContainer
     });
 
     const terminal = new Terminal(terminalConfig);
     terminal.open(ui.terminalContainer);
-    updateTerminal(terminal, game);
-
     resizeTerminal(terminal, ui.terminalContainer);
+    updateTerminal(terminal, game);
 
     window.addEventListener('resize', () => {
         resizeTerminal(terminal, ui.terminalContainer);
@@ -52,18 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
         game,
         ui,
         editor,
-        terminal,
-        pyodideInstance
+        terminal
     };
 
     updateGameDisplay(context);
 
     ui.runButton.addEventListener("click", async () => {
-        const userCode = editor.state.doc.toString(); 
         if (pyodideInstance) {
-            const direction = await executePythonCode(pyodideInstance, userCode, terminal);
-            game.moveSnake(direction);
-            updateTerminal(terminal, game);
+            runLevel(context, pyodideInstance)
         } else {
             terminal.write("Pyodide n'est pas encore prêt. Veuillez patienter...\r\n");
         }

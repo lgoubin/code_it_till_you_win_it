@@ -1,4 +1,4 @@
-import { CHARACTERS } from './constants.js';
+import { CHARACTERS } from '../../constants.js';
 
 export class Snake {
     constructor(gridSize) {

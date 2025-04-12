@@ -1,20 +1,20 @@
-import { Level } from "./level";
-import { SnakeGame } from "./snakeGame";
+import { LearningLevel } from "./learningLevel";
+import { GameFactory } from "./gameFactory";
 
 export class LearningGame {
-    constructor(data) {
-        this.title = data.title;
-        this.introduction = data.introduction;
-        switch (data.gameClass) {
-            case 'SnakeGame':
-                this.game = new SnakeGame({ width: 20, height: 10 });
-                break;
-            default:
-                break;
-        }
-        const levels = data.levels;
-        this.levels = levels.map(level => new Level(level));
+    constructor(config) {
+        this.title = config.title;
+        this.introduction = config.introduction;
+        this.gameType = config.gameType;
+        this.levels = config.levels.map(lvl => new LearningLevel(lvl, this.gameType));
         this.currentLevelIndex = 0;
+
+        this.initLevel();
+    }
+    
+    initLevel() {
+        const learningLevel = this.currentLevel;
+        this.game = GameFactory.create(learningLevel.gameType, learningLevel.gameConfig);
     }
 
     get currentLevel() {

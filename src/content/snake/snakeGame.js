@@ -1,14 +1,15 @@
 import { Snake } from './snake';
-import { CHARACTERS } from './constants.js';
-import { DIRECTIONS } from './constants.js';
+import { CHARACTERS } from '../../constants.js';
+import { DIRECTIONS } from '../../constants.js';
 
 export class SnakeGame {
-    constructor(gridSize) {
-        this.gridSize = gridSize;
-        this.snake = new Snake(gridSize);
+    constructor(config) {
+        this.gridSize = config.gridSize;
+        this.initialSnake = config.initialSnake;
+        this.snake = new Snake(this.initialSnake);
         this.apple = this.generateApple();
         this.score = 0;
-    }
+      }
 
     // Générer une pomme à une position aléatoire sur la grille
     generateApple() {
@@ -16,6 +17,16 @@ export class SnakeGame {
             x: Math.floor(Math.random() * this.gridSize.width),
             y: Math.floor(Math.random() * this.gridSize.height)
         };
+    }
+
+    reset() {
+        this.snake = new Snake(this.initialSnake);
+        this.apple = this.generateApple();
+        this.score = 0;
+    }
+
+    async getNextDirection() {
+        return await this.pyodide.runPythonAsync("nextMove()");
     }
 
     // Déplacer le serpent et vérifier si il mange une pomme
@@ -63,10 +74,12 @@ export class SnakeGame {
         return output;
     }
 
-    reset() {
-        this.snake = new Snake(this.gridSize);
-        this.apple = this.generateApple();
-        this.score = 0;
+    getGameState() {
+        return {
+          gridSize: this.gridSize,
+          snake: this.snake.positions,
+          apple: this.apple,
+        };
     }
 }
 
