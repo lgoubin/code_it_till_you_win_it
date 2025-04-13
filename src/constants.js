@@ -1,10 +1,10 @@
 
 
 export const CHARACTERS = {
-    HEAD: '$',
-    BODY: '#',
-    TAIL: '+',
-    APPLE: '@',
+    HEAD: '\x1b[92m$\x1b[0m',
+    BODY: '\x1b[92m#\x1b[0m',
+    TAIL: '\x1b[92m+\x1b[0m',
+    APPLE: '\x1b[91m@\x1b[0m',
     WALL: '*',
     EMPTY: '·'
 };

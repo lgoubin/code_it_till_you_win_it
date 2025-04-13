@@ -1,9 +1,11 @@
 import { resizeTerminal, updateGameDisplay, resetGameContainer, runLevel,
-         updateTerminal, initializePyodide, terminalConfig } from './utils.js';
+         updateTerminal, terminalConfig } from './utils.js';
+import { initializePyodide } from './pyodideRunner.js';
 import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
 import { python } from "@codemirror/lang-python";
 import { indentWithTab } from "@codemirror/commands";
+import { oneDark } from '@codemirror/theme-one-dark';
 import { Terminal } from "xterm";
 import { LearningGame } from './learningGame.js';
 import snakeData from './content/snake/snake.json';
@@ -17,17 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const ui = {
         levelTitle: document.getElementById('level-title'),
         levelDescription: document.getElementById('level-description'),
-        feedback: document.getElementById('feedback'),
+        feedback: document.getElementById('feedback-popup'),
         runButton: document.getElementById('run-button'),
         resetButton: document.getElementById('reset-button'),
-        nextLevelButton: document.getElementById('next-button'),
         editorContainer: document.getElementById('editor-container'),
         terminalContainer: document.getElementById('terminal-container'),
     };    
 
     const editor = new EditorView({
         doc: learningGame.currentLevel.starterCode,
-        extensions: [basicSetup, python(), keymap.of([indentWithTab])],
+        extensions: [basicSetup, python(), keymap.of([indentWithTab]), oneDark],
         parent: ui.editorContainer
     });
 
@@ -67,13 +68,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.resetButton.addEventListener("click", () => {
         resetGameContainer(context);
-    });
-
-    ui.nextLevelButton.addEventListener("click", () => {
-        if (learningGame.currentLevel.isComplete(game)) {
-            learningGame.currentLevel.markAsCompleted();
-            learningGame.nextLevel();
-            resetGameContainer(context);
-        }
     });
 });
