@@ -41,7 +41,7 @@
     --blue: #64DFBE;
     --red: #DF5873;
     --green: #B0D687;
-    --yellow: #DFA474;
+    --yellow: #DFB774;
     --orange: #DF836B;
     --pink: #DF63C4;
 }
@@ -64,8 +64,89 @@ html,body {
     overflow: hidden;
 }
 
-#main-container {
+.hidden {
+    display: none;
+}
+
+.shown {
     display: flex;
+}
+
+.welcome-screen {
+    font-family: 'PublicPixel', sans-serif;
+}
+
+#title {
+    flex:1;
+}
+
+#home-menu {
+    flex:1;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 4%;
+}
+
+#game-intro {
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10%;
+}
+
+#intro-text {
+    font-size: 1.8em;
+    font-family: 'GlacialIndifference', sans-serif;
+    color: var(--white);
+    text-align: center;
+    margin-top: 10px;
+}
+
+.menu-button {
+    background-color: var(--main-level-6);
+    border: 12px dashed;
+    border-radius: 10px;
+    padding: 30px 50px;
+    text-align: center;
+    display: inline-block;
+    font-family: 'PublicPixel', sans-serif;
+    font-size: 6vh;
+    cursor: pointer;
+}
+
+.menu-button:hover {
+    background-color: var(--dark-grey);
+    transition: background-color 0.3s ease;
+}
+
+#start-snake-btn {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+
+#start-pacman-btn {
+    border-color: var(--yellow);
+    color: var(--yellow);
+}
+
+.gameTitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    color: var(--main-level-3);
+    font-size: clamp(16px, 10vh, 10vw);
+}
+
+.gameTitle p {
+    color: var(--main-level-1);
+}
+
+#game-screen {
     flex-direction: column;
     height: 100%;
     width: 100%; 
@@ -134,32 +215,66 @@ p {
     overflow: visible;
 }
 
-button {
+.game-button {
     background-color: var(--main-level-4);
     border: none;
     color: var(--main-level-0);
     border-radius: 10px;
-    padding: 20px 20px;
+    padding: 20px 30px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 18px;
     cursor: pointer;
-    width: 10%;
     margin: auto 0;
 }
 
-button:hover {
+.game-button:hover {
     background-color: var(--main-level-1);
     color: var(--main-level-4);
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
-button:disabled {
+.game-button:disabled {
     background-color: var(--grey);
     color: var(--white);
     cursor: not-allowed;
+}
+
+/* Style de la pop-up */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none; /* Par défaut, caché */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+}
+
+.popup-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--main-level-4);
+}
+
+.popup-message {
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: var(--black);
 }
 
 .cm-editor {

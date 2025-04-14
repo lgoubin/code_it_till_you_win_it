@@ -11,7 +11,27 @@
     <script type="module" src="/src/utils.js"></script>
 </head>
 <body>
-    <div id="main-container">
+    <div id="home-screen" class="welcome-screen shown">
+        <div id="title">
+            <div class="gameTitle">
+                <p>Code</p> 
+                <p>It</p>
+                <p>Till</p>
+                <p>You</p>
+                <p>Win</p>
+                <p>It.</p>
+            </div>
+        </div>
+        <div id="home-menu" class="shown">
+            <button id="start-snake-btn" class="menu-button">SNAKE</button>
+            <button id="start-pacman-btn" class="menu-button">PACMAN</button>
+        </div>
+        <div id="game-intro" class = "hidden">
+            <p id="intro-text"></p>
+            <button id="start-game-btn" class="game-button">Commencer</button>
+        </div>
+    </div>
+    <div id="game-screen" class="hidden">
         <header>
             <h1 id="level-title"></h1>
             <p id="level-description"></p>
@@ -21,13 +41,15 @@
             <div id="terminal-container"></div>
         </div>
         <div id="menu-container">
-            <button id="run-button">Run</button>
-            <button id="reset-button">Reset</button>
+            <button id="run-button" class="game-button">Run</button>
+            <button id="reset-button" class="game-button">Reset</button>
         </div>
-        <div id="feedback-popup" hidden>
-            <div id="feedback-content">
-                <p id="feedback-message">Test</p>
-                <button id="close-feedback">Close</button>
+
+        <div id="feedback-popup" class="popup-overlay">
+            <div class="popup-content">
+            <h2 class="popup-title">Je suis sûre que tu peux y arriver sans tricher !</h2>
+            <p class="popup-message"></p>
+            <button id="close-popup" class="game-button">Continuer </button>
             </div>
         </div>
     </div>

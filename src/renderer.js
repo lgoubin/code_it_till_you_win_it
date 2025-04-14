@@ -1,17 +1,13 @@
-import { resizeTerminal, updateGameDisplay, resetGameContainer, runLevel,
-         updateTerminal, terminalConfig } from './utils.js';
+import { resizeTerminal, updateGameDisplay, resetGameContainer, runLevel, terminalConfig, updateTerminal, switchElementVisibility } from './utils.js';
 import { initializePyodide } from './pyodideRunner.js';
-import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
-import { python } from "@codemirror/lang-python";
-import { indentWithTab } from "@codemirror/commands";
-import { oneDark } from '@codemirror/theme-one-dark';
+
 import { Terminal } from "xterm";
 import { LearningGame } from './learningGame.js';
 import snakeData from './content/snake/snake.json';
 
-const learningGame = new LearningGame(snakeData);
-const game = learningGame.game;
+let learningGame;
+let game;
 let context;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,23 +15,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const ui = {
         levelTitle: document.getElementById('level-title'),
         levelDescription: document.getElementById('level-description'),
-        feedback: document.getElementById('feedback-popup'),
+        feedbackPopup: document.getElementById('feedback-popup'),
         runButton: document.getElementById('run-button'),
         resetButton: document.getElementById('reset-button'),
+        closeButton: document.getElementById('close-popup'),
+        homeScreen: document.getElementById('home-screen'),
+        gameScreen: document.getElementById('game-screen'),
+        homeMenu: document.getElementById('home-menu'),
+        gameIntro: document.getElementById('game-intro'),
+        introText: document.getElementById('intro-text'),
+        startButton: document.getElementById('start-game-btn'),
         editorContainer: document.getElementById('editor-container'),
         terminalContainer: document.getElementById('terminal-container'),
-    };    
+        snakeStartButton: document.getElementById('start-snake-btn'),
+    };
 
     const editor = new EditorView({
-        doc: learningGame.currentLevel.starterCode,
-        extensions: [basicSetup, python(), keymap.of([indentWithTab]), oneDark],
-        parent: ui.editorContainer
+        parent: ui.editorContainer,
+        doc: ''
     });
 
     const terminal = new Terminal(terminalConfig);
     terminal.open(ui.terminalContainer);
-    resizeTerminal(terminal, ui.terminalContainer);
-    updateTerminal(terminal, game);
 
     window.addEventListener('resize', () => {
         resizeTerminal(terminal, ui.terminalContainer);
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializePyodide().then((pyodide) => {
         pyodideInstance = pyodide;
     });
-    
+
     context = {
         learningGame,
         game,
@@ -55,7 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
         terminal
     };
 
-    updateGameDisplay(context);
+    ui.snakeStartButton.addEventListener('click', () => {
+        learningGame = new LearningGame(snakeData);
+        game = learningGame.game;
+        context.learningGame = learningGame;
+        context.game = game;
+        ui.introText.textContent = learningGame.introduction;
+        switchElementVisibility(ui.homeMenu, ui.gameIntro);
+    });
+
+    ui.startButton.addEventListener('click', () => {
+        switchElementVisibility(ui.homeScreen, ui.gameScreen);
+        resetGameContainer(context);
+        resizeTerminal(terminal, ui.terminalContainer);
+    });
 
     ui.runButton.addEventListener("click", async () => {
         if (pyodideInstance) {
@@ -68,5 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.resetButton.addEventListener("click", () => {
         resetGameContainer(context);
+    });
+
+    ui.closeButton.addEventListener("click", () => {
+        if (context.learningGame.currentLevel.isSucceeded()) {
+            ui.feedbackPopup.style.display = 'none';
+            learningGame.nextLevel();
+            resetGameContainer(context);
+        } else {
+            ui.feedbackPopup.style.display = 'none';
+            game.reset();
+            updateTerminal(terminal, game);
+        }
     });
 });

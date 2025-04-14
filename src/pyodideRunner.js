@@ -7,13 +7,11 @@ export async function initializePyodide() {
     } 
 }
 
-async function validateUserCode(pyodide, userCode) {
-    const validatorCode = await loadValidator("snake.py");
+async function validateUserCode(pyodide, userCode, game, level) {
+    const validatorCode = await loadValidator(game.name + '/level' + level.id + '.py');
     
-    const fullValidatorCode = `
-${validatorCode}
-${userCode}                        
-result = run_tests()`.replace(/\t/g, '    ');
+    const fullValidatorCode = `${validatorCode}${userCode}\nresult = run_tests()`.replace(/\t/g, '    ');
+
     try {
         await pyodide.runPythonAsync(fullValidatorCode);
         return pyodide.globals.get("result").toJs();
@@ -33,29 +31,28 @@ async function loadValidator(filename) {
 
 export async function executePythonMoveLoop(pyodide, game, level, userCode, gameState, onStep) {
     const fullCode = `${userCode}`.replace(/\t/g, '    ');
-
+    
     try {
         await pyodide.runPythonAsync(fullCode);
-        const stopCondition = level.stopCondition;
         while (true) {
-          pyodide.globals.set("head", gameState.snakeHead);
-          pyodide.globals.set("apple", gameState.apple);
-          pyodide.globals.set("grid_size", gameState.gridSize);
-          pyodide.globals.set("direction", gameState.direction);
-        
-          const direction = await pyodide.runPythonAsync("nextMove()");
-          onStep(direction);
-        
-          if (game.shouldStop(stopCondition)) {
-            break;
-          }
-        
-          await new Promise(r => setTimeout(r, 250));
+            pyodide.globals.set("head", gameState.snakeHead);
+            pyodide.globals.set("apple", gameState.apple);
+            pyodide.globals.set("grid_size", gameState.gridSize);
+            pyodide.globals.set("direction", gameState.direction);
+            
+            const direction = await pyodide.runPythonAsync("nextMove()");
+            onStep(direction);
+            
+            if (game.shouldStop("hasReachedMaxSteps") || game.hasCollided) {
+                break;
+            }
+            
+            await new Promise(r => setTimeout(r, 300));
         }
-
-        const result = await validateUserCode(pyodide, userCode);
+        
+        const result = await validateUserCode(pyodide, userCode, game, level);
         return Object.fromEntries(result);
-
+        
     } catch (error) {
         return { success: false, failures: [`Erreur Python : ${error.message}`] };
     }

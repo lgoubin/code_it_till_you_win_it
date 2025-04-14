@@ -25,14 +25,14 @@ export function runLevel(context, pyodideInstance) {
         context.game.moveSnake(direction);
         updateTerminal(context.terminal, context.game);
     }).then((result) => {
-        displayFeedback(context.ui, result);
+        displayFeedback(context.ui, context.learningGame.currentLevel, result);
     });
 }  
 
 export function resizeTerminal(terminal, container) {
     const margin = 20;
     const cols = Math.floor((container.offsetWidth - margin) / 9);
-    const rows = Math.floor((container.offsetHeight - margin) / 22);
+    const rows = Math.floor((container.offsetHeight - margin) / 24);
     terminal.resize(cols, rows);
 }
 
@@ -40,10 +40,6 @@ export function resizeTerminal(terminal, container) {
 export function updateGameDisplay(context) {
     context.ui.levelTitle.textContent = context.learningGame.currentLevel.title;
     context.ui.levelDescription.textContent = context.learningGame.currentLevel.instructions;
-    // context.ui.nextLevelButton.disabled = !context.learningGame.currentLevel.isComplete(context.game);
-    // if (context.learningGame.currentLevel.isComplete(context.game)) {
-    //     context.ui.feedback.textContent = "Niveau terminé !";
-    // }
 }
 
 export function resetGameContainer(context) {
@@ -54,7 +50,6 @@ export function resetGameContainer(context) {
         extensions: [basicSetup, python(), keymap.of([indentWithTab]), oneDark],
         parent: context.ui.editorContainer,
     }));
-    context.ui.feedback.textContent = "";
     updateTerminal(context.terminal, context.game);
 }
 
@@ -63,10 +58,22 @@ export function updateTerminal(terminal, game) {
     terminal.write(game.render());
 }
 
-function displayFeedback(ui, result) {
+export function switchElementVisibility(previousElement, nextElement) {
+    previousElement.classList.remove('shown');
+    previousElement.classList.add('hidden');
+    nextElement.classList.remove('hidden');
+    nextElement.classList.add('shown');
+}
+
+function displayFeedback(ui, level, result) {
     if (result.success) {
-        ui.feedback.hidden = false;
+        ui.feedbackPopup.querySelector('h2').textContent = "Bravo !";
+        ui.feedbackPopup.querySelector('p').textContent = level.messagePopup;
+        ui.feedbackPopup.style.display = 'flex';
+        level.markAsSucceeded();
     } else {
-        console.error("Test échoué :", result.failures);
+        ui.feedbackPopup.querySelector('h2').textContent = "Oups !";
+        ui.feedbackPopup.querySelector('p').textContent =  result.failures
+        ui.feedbackPopup.style.display = 'flex';
     }
 }

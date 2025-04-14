@@ -4,11 +4,15 @@ import { DIRECTIONS } from '../../constants.js';
 
 export class SnakeGame {
     constructor(config) {
+        this.name = "snake";
         this.gridSize = config.gridSize;
         this.initialSnake = config.initialSnake;
         this.snake = new Snake(this.initialSnake);
         this.apple = this.generateApple();
         this.score = 0;
+        this.steps = 0;
+        this.maxSteps = config.maxSteps;
+        this.hasCollided = false;
     }
     
     // Générer une pomme à une position aléatoire sur la grille
@@ -23,6 +27,7 @@ export class SnakeGame {
         this.snake = new Snake(this.initialSnake);
         this.apple = this.generateApple();
         this.score = 0;
+        this.steps = 0;
     }
     
     async getNextDirection() {
@@ -39,6 +44,7 @@ export class SnakeGame {
         const willEatApple = (head.x === this.apple.x && head.y === this.apple.y);
         
         if (!this.snake.move(DIRECTIONS[direction], willEatApple)) {
+            this.hasCollided = true;
             return false;
         }
         
@@ -46,7 +52,8 @@ export class SnakeGame {
             this.score++;
             this.apple = this.generateApple();
         }
-        
+
+        this.steps++;    
         return true;        
     }
     
@@ -83,20 +90,19 @@ export class SnakeGame {
             apple: this.apple,
         };
     }
+
+    hasReachedMaxSteps() {
+        return this.steps >= this.maxSteps;
+    }
+
     
     shouldStop(stopCondition) {
         switch (stopCondition) {
-            case "hasMoved":
-                return this.snake.body[0].x !== this.initialSnake.x || this.snake.body[0].y !== this.initialSnake.y;
+            case "hasReachedMaxSteps":
+                return this.hasReachedMaxSteps();
 
             case "ateApple":
-                return this.snakeHead.x === this.apple.x && this.snakeHead.y === this.apple.y;
-            
-            case "maxSteps":
-                return this.steps >= this.maxSteps;
-            
-            case "collision":
-                return this.hasCollided();
+                return this.snake.length > this.initialSnake.length;
             
             default:
                 return false;
