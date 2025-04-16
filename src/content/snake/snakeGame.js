@@ -1,13 +1,13 @@
 import { Snake } from './snake';
-import { CHARACTERS } from '../../constants.js';
-import { DIRECTIONS } from '../../constants.js';
+import { CHARACTERS } from './constants.js';
+import { DIRECTIONS } from './constants.js';
 
 export class SnakeGame {
     constructor(config) {
         this.name = "snake";
         this.gridSize = config.gridSize;
         this.initialSnake = config.initialSnake;
-        this.snake = new Snake(this.initialSnake);
+        this.snake = new Snake(this.gridSize, this.initialSnake);
         this.apple = this.generateApple();
         this.score = 0;
         this.steps = 0;
@@ -63,8 +63,7 @@ export class SnakeGame {
         
         // Affichage du serpent
         this.snake.body.forEach((segment, index) => {
-            const char = index === 0 ? CHARACTERS.HEAD : index === this.snake.body.length - 1 ? CHARACTERS.TAIL : CHARACTERS.BODY;
-            grid[segment.y][segment.x] = char;
+            grid[segment.y][segment.x] = this.snake.getCharacterForSegment(index);
         });
         
         // Affichage de la pomme
@@ -86,7 +85,7 @@ export class SnakeGame {
     getGameState() {
         return {
             gridSize: this.gridSize,
-            snake: this.snake.positions,
+            snakeBody: this.snake.body,
             apple: this.apple,
         };
     }

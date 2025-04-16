@@ -1,9 +1,9 @@
-import { CHARACTERS } from '../../constants.js';
+import { CHARACTERS } from './constants.js';
 
 export class Snake {
-    constructor(gridSize) {
+    constructor(gridSize,initialSnake) {
         this.gridSize = gridSize;
-        this.body = [{ x: 5, y: 5 }];
+        this.body = initialSnake;
         this.direction = { x: 0, y: 1 };
         this.length = 1;
         this.headCharacter = CHARACTERS.HEAD;
@@ -48,11 +48,11 @@ export class Snake {
 
     getCharacterForSegment(index) {
         if (index === 0) {
-            return Snake.CHARACTERS.HEAD; // La tête
+            return CHARACTERS.HEAD; // La tête
         } else if (index === this.body.length - 1) {
-            return Snake.CHARACTERS.TAIL; // La queue
+            return CHARACTERS.TAIL; // La queue
         } else {
-            return Snake.CHARACTERS.BODY; // Le corps
+            return CHARACTERS.BODY; // Le corps
         }
     }
 }

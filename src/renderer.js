@@ -1,10 +1,11 @@
-import { resizeTerminal, updateGameDisplay, resetGameContainer, runLevel, terminalConfig, updateTerminal, switchElementVisibility } from './utils.js';
+import { resizeTerminal, updateGameDisplay, resetGameContainer, terminalConfig, updateTerminal, switchElementVisibility } from './utils.js';
 import { initializePyodide } from './pyodideRunner.js';
+import { runLevel } from './logic/runLevel.js';
 import { EditorView, keymap } from "@codemirror/view";
 
 import { Terminal } from "xterm";
-import { LearningGame } from './learningGame.js';
-import snakeData from './content/snake/snake.json';
+import { LearningGame } from './learningGame/learningGame.js';
+import snakeData from './content/snake/snakeConfig.json';
 
 let learningGame;
 let game;

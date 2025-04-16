@@ -4,7 +4,6 @@ import { python } from "@codemirror/lang-python";
 import { keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from '@codemirror/theme-one-dark';
-import { executePythonMoveLoop } from "./pyodideRunner.js";
 
 export const terminalConfig = {
     theme: {
@@ -15,19 +14,6 @@ export const terminalConfig = {
     cursorBlink: true,
     cursorStyle: 'block',
 };
-
-export function runLevel(context, pyodideInstance) {      
-    const userCode = context.editor.state.doc.toString();
-    
-    const gameState = context.game.getGameState();
-    
-    executePythonMoveLoop(pyodideInstance, context.game, context.learningGame.currentLevel, userCode, gameState, (direction) => {
-        context.game.moveSnake(direction);
-        updateTerminal(context.terminal, context.game);
-    }).then((result) => {
-        displayFeedback(context.ui, context.learningGame.currentLevel, result);
-    });
-}  
 
 export function resizeTerminal(terminal, container) {
     const margin = 20;
@@ -65,7 +51,7 @@ export function switchElementVisibility(previousElement, nextElement) {
     nextElement.classList.add('shown');
 }
 
-function displayFeedback(ui, level, result) {
+export function displayFeedback(ui, level, result) {
     if (result.success) {
         ui.feedbackPopup.querySelector('h2').textContent = "Bravo !";
         ui.feedbackPopup.querySelector('p').textContent = level.messagePopup;

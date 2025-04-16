@@ -1,5 +1,5 @@
-import { LearningLevel } from "./learningLevel";
-import { GameFactory } from "./gameFactory";
+import { LearningLevel } from "../learningLevel/learningLevel";
+import { GameFactory } from "../gameFactory";
 
 export class LearningGame {
     constructor(config) {
@@ -24,11 +24,8 @@ export class LearningGame {
     nextLevel() {
         if (this.currentLevelIndex < this.levels.length - 1) {
             this.currentLevelIndex++;
+            this.initLevel();
         }
-    }
-
-    reset() {
-        this.currentLevelIndex = 0;
     }
 
     isFinished() {

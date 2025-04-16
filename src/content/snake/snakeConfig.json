@@ -10,7 +10,7 @@
             "starterCode": "def nextMove(): \n    direction = 'N' \n    return direction",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": { "x": 5, "y": 5 },
+                "initialSnake": [{ "x": 5, "y": 5 }],
                 "maxSteps": 1
             },
             "popup": "On sait faire bouger le serpent ! \n Le risque à présent est de foncer dans un mur ou de se cogner contre lui-même. \n On va donc devoir réfléchir à la direction à prendre pour éviter cela."
@@ -22,7 +22,7 @@
             "starterCode": "def nextMove(): \n    direction = 'E' \n    return direction",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": { "x": 0, "y": 0 },
+                "initialSnake": [{ "x": 0, "y": 0 }],
                 "maxSteps": 10
             },
             "popup": "Le serpent sait éviter les murs !\n Mais il commence à avoir faim... \n Il va falloir lui apprendre à chercher la nourriture."
@@ -35,7 +35,7 @@
             "validatorCode": "hasEaten",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": { "x": 5, "y": 5 }
+                "initialSnake": [{ "x": 5, "y": 5 }]
             },
             "popup": "Le serpent a bien mangé ! Ce qui l'a tellement fait grandir qu'il s'est cogné contre lui-même ! \n Afin d'éviter cela, on peut essayer de faire en sorte qu'il emplisse autant d'espace sur le plateau que possible. \n Pour cela, nous allons mettre en place un algorithme dit 'Cycle Hamiltonien' ou A* : le serpent doit se déplacer de manière à visiter chaque case du plateau avant de revenir à sa position initiale. \n Nécessairement, au cours d'un cycle, il aura mangé au moins une pomme. \n Il doit évidemment continuer à éviter les murs."
         },
@@ -47,7 +47,7 @@
             "validatorCode": "hasCompletedHamiltonienCycle",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": { "x": 5, "y": 5 }
+                "initialSnake": [{ "x": 5, "y": 5 }]
             },
             "popup": "On a réussi à manger tellement de pommes que le serpent rempli tout l'espace du plateau !\nC'était un peu long et ennuyant cependant...\nPourrions-nous rendre ce serpent un peu plus \"intelligent\" ? "
         },
@@ -59,7 +59,7 @@
             "validatorCode": "hasFoundShortestPath",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": { "x": 5, "y": 5 }
+                "initialSnake": [{ "x": 5, "y": 5 }]
             }
         }
     ]
