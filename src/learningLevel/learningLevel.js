@@ -5,7 +5,7 @@ export class LearningLevel {
         this.sousTitre = sousTitre;
         this.instructions = instructions;
         this.starterCode = starterCode;
-        this.hiddenCode = hiddenCode;
+        this.hiddenCode = hiddenCode || "";
         this.stopCondition = stopCondition;
         this.gameType = gameType;
         this.gameConfig = gameConfig;

@@ -13,10 +13,10 @@ export async function initializePyodide() {
  * avec les résultats des tests.
  * Le code utilisateur est passé en argument à la fonction `run_tests()`.
  */
-async function validateUserCode(pyodide, userCode, game, level) {
-    const validatorCode = await loadValidator(game.name + '/level' + level.id + '.py');
-    
-    const fullValidatorCode = `${validatorCode}${userCode}\nresult = run_tests()`.replace(/\t/g, '    ');
+async function validateUserCode(pyodide, fullCode, game, level) {
+    const validatorCode = await loadValidator(game.name.toLowerCase() + '.py');
+    const fullValidatorCode = `${fullCode}\n${validatorCode}\nresult = run_tests(TestLevel${level.id})`.replace(/\t/g, '    ');
+    console.log(fullValidatorCode);
 
     try {
         await pyodide.runPythonAsync(fullValidatorCode);
@@ -49,25 +49,26 @@ export async function executePythonMoveLoop(pyodide, game, level, userCode, onSt
     const fullCode = `${level.hiddenCode}\n${userCode}`.replace(/\t/g, '    ');
 
     try {
+        // Définition des globales dont l'utilisateur a besoin
+        const globals = game.getGameState() ?? {};
+        for (const [key, value] of Object.entries(globals)) {
+            pyodide.globals.set(key, pyodide.toPy(value));
+        }
+
         // Exécute le code utilisateur (doit définir la fonction nextMove)
         await pyodide.runPythonAsync(fullCode);
 
         while (!game.hasReachedMaxSteps() && !game.gameOver) {
-            // Définition des globales dont l'utilisateur a besoin
-            const globals = game.getGameState() ?? {};
-            for (const [key, value] of Object.entries(globals)) {
-                pyodide.globals.set(key, value);
-            }
-
             let direction;
             direction = await pyodide.runPythonAsync("next_move()");
 
             onStep(direction);
+            console.log(direction)
 
-            await new Promise(r => setTimeout(r, 400));
+            await new Promise(r => setTimeout(r, 300));
         }
         // En fin de partie, on valide le comportement de l’utilisateur via les tests du niveau
-        const result = await validateUserCode(pyodide, userCode, game, level);
+        const result = await validateUserCode(pyodide, fullCode, game, level);
         return Object.fromEntries(result);
 
     } catch (error) {
@@ -81,8 +82,8 @@ export async function executePythonMoveLoop(pyodide, game, level, userCode, onSt
  */
 function friendlyError(msg) {
 
-    if (msg.includes("name 'nextMove' is not defined")) {
-        return "Tu dois définir une fonction 'nextMove'. Tu peux utiliser le bouton Reset pour revenir au code fourni.";
+    if (msg.includes("name 'next_move' is not defined")) {
+        return "Tu dois définir une fonction 'next_move'. Tu peux utiliser le bouton Reset pour revenir au code fourni.";
     } else if (msg.includes("SyntaxError")) {
         return "Il y a une erreur de syntaxe dans ton code. Vérifie les parenthèses et les deux-points.";
     } else if (msg.includes("TypeError")) {
