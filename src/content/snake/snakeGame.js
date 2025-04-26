@@ -8,24 +8,36 @@ export class SnakeGame {
         this.gridSize = config.gridSize;
         this.initialSnake = config.initialSnake;
         this.snake = new Snake(this.gridSize, this.initialSnake);
-        this.apple = this.generateApple();
+        this.enableApple = config.enableApple;
+        if (this.enableApple) {
+            this.apple = this.generateApple();
+        } else {
+            this.apple = null;
+        }
         this.score = 0;
         this.steps = 0;
         this.maxSteps = config.maxSteps;
-        this.hasCollided = false;
+        this.gameOver = false;
     }
     
-    // Générer une pomme à une position aléatoire sur la grille
+    // Générer une pomme à une position aléatoire sur la grille et pas sur le serpent
     generateApple() {
-        return {
-            x: Math.floor(Math.random() * this.gridSize.width),
-            y: Math.floor(Math.random() * this.gridSize.height)
-        };
+        let apple;
+        do {
+            apple = {
+                x: Math.floor(Math.random() * this.gridSize.width),
+                y: Math.floor(Math.random() * this.gridSize.height)
+            };
+        } while (this.snake.body.some(segment => segment.x === apple.x && segment.y === apple.y));
+        return apple;
     }
     
     reset() {
-        this.snake = new Snake(this.initialSnake);
-        this.apple = this.generateApple();
+        this.snake = new Snake(this.gridSize, this.initialSnake);
+        if (this.enableApple) 
+            this.apple = this.generateApple();
+        else 
+            this.apple = null;
         this.score = 0;
         this.steps = 0;
     }
@@ -36,23 +48,23 @@ export class SnakeGame {
     
     // Déplacer le serpent et vérifier si il mange une pomme
     moveSnake(direction) {
-        const head = {
+        const newHead = {
             x: this.snake.body[0].x + DIRECTIONS[direction].x,
             y: this.snake.body[0].y + DIRECTIONS[direction].y
         };
         
-        const willEatApple = (head.x === this.apple.x && head.y === this.apple.y);
-        
+        const willEatApple = (newHead.x === this.apple?.x && newHead.y === this.apple?.y);
+
         if (!this.snake.move(DIRECTIONS[direction], willEatApple)) {
-            this.hasCollided = true;
+            this.gameOver = true;
             return false;
         }
         
-        if (willEatApple) {
+        if(this.enableApple && willEatApple) {
             this.score++;
             this.apple = this.generateApple();
         }
-
+        
         this.steps++;    
         return true;        
     }
@@ -66,8 +78,9 @@ export class SnakeGame {
             grid[segment.y][segment.x] = this.snake.getCharacterForSegment(index);
         });
         
-        // Affichage de la pomme
-        grid[this.apple.y][this.apple.x] = CHARACTERS.APPLE;
+        if (this.enableApple) {
+            grid[this.apple.y][this.apple.x] = CHARACTERS.APPLE;
+        }
         
         // Affichage de la grille avec bordures *
         let output = '\r\n\r\n';

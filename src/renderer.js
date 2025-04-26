@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const ui = {
         levelTitle: document.getElementById('level-title'),
-        levelDescription: document.getElementById('level-description'),
+        levelObjective: document.getElementById('level-objective'),
+        levelInstructions: document.getElementById('level-instructions'),
         feedbackPopup: document.getElementById('feedback-popup'),
         runButton: document.getElementById('run-button'),
         resetButton: document.getElementById('reset-button'),
@@ -57,6 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
         terminal
     };
 
+    // DEBUG MODE
+    if (import.meta.env.__GAME__ && import.meta.env.__LEVEL__) {
+        const levelId = import.meta.env.__LEVEL__;
+        learningGame = new LearningGame(snakeData);
+        learningGame.setDebugStartLevel(levelId);
+        game = learningGame.game;
+        context.learningGame = learningGame;
+        context.game = game;
+        ui.introText.textContent = learningGame.introduction;
+        switchElementVisibility(ui.homeScreen, ui.gameScreen);
+        resetGameContainer(context);
+        resizeTerminal(terminal, ui.terminalContainer);
+    }
+
+
+    // Buttons event listeners
     ui.snakeStartButton.addEventListener('click', () => {
         learningGame = new LearningGame(snakeData);
         game = learningGame.game;

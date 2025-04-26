@@ -11,6 +11,11 @@ export class LearningGame {
 
         this.initLevel();
     }
+
+    setDebugStartLevel(level) {
+        this.currentLevelIndex = level;
+        this.initLevel();
+    }
     
     initLevel() {
         const learningLevel = this.currentLevel;

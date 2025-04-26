@@ -19,11 +19,13 @@ describe('Utility Functions', () => {
             const context = {
                 ui: {
                     levelTitle: { textContent: '' },
-                    levelDescription: { textContent: '' },
+                    levelObjective: { textContent: '' },
+                    levelInstructions: { textContent: '' },
                 },
                 learningGame: {
                     currentLevel: {
                         title: 'Level 1',
+                        sousTitre: 'Objective of the level',
                         instructions: 'Do this task',
                     },
                 },
@@ -32,7 +34,8 @@ describe('Utility Functions', () => {
             updateGameDisplay(context);
 
             expect(context.ui.levelTitle.textContent).toBe('Level 1');
-            expect(context.ui.levelDescription.textContent).toBe('Do this task');
+            expect(context.ui.levelObjective.textContent).toBe('Objective of the level');
+            expect(context.ui.levelInstructions.textContent).toBe('Do this task');
         });
     });
     describe('resetGameContainer', () => {
@@ -42,7 +45,7 @@ describe('Utility Functions', () => {
                 learningGame: {
                     currentLevel: { starterCode: 'print("Hello")', title: 'Level 1', instructions: 'Do this task' },
                 },
-                ui: { editorContainer: {}, levelTitle: {}, levelDescription: {} },
+                ui: { editorContainer: {}, levelTitle: {}, levelObjective: {}, levelInstructions: {} },
                 editor: { setState: jest.fn() },
                 terminal: {clear: jest.fn(), write: jest.fn() }
             };

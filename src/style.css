@@ -158,10 +158,20 @@ h1 {
     margin: 5px;
 }
 p {
-    font-size: 1.5em;
+    font-size: 1.4em;
     color: var(--white);
     margin: 5px;
 }
+
+
+#level-objective {
+    white-space: pre-line;
+}
+
+#level-instructions {
+    font-size: 1.2em;
+    white-space: pre-line;
+}  
 
 #game-container {
     flex: 1;

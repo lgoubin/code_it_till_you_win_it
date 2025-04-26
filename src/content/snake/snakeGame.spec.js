@@ -6,6 +6,7 @@ describe('SnakeGame', () => {
     const config = {
         gridSize: { width: 10, height: 10 },
         initialSnake: [{ x: 5, y: 5 }],
+        enableApple: true,
         maxSteps: 100,
     };
 
@@ -19,11 +20,12 @@ describe('SnakeGame', () => {
             expect(game.gridSize).toEqual(config.gridSize);
             expect(game.initialSnake).toEqual(config.initialSnake);
             expect(game.snake).toBeDefined();
+            expect(game.enableApple).toBe(config.enableApple);
             expect(game.apple).toBeDefined();
             expect(game.score).toBe(0);
             expect(game.steps).toBe(0);
             expect(game.maxSteps).toBe(config.maxSteps);
-            expect(game.hasCollided).toBe(false);
+            expect(game.gameOver).toBe(false);
         });
     });
 
@@ -65,14 +67,14 @@ describe('SnakeGame', () => {
             expect(game.apple).not.toEqual({ x: 6, y: 5 });
         });
 
-        it('should set hasCollided to true if the snake collides with a wall', () => {
+        it('should set gameOver to true if the snake collides with a wall', () => {
             game.snake.body = [{ x: 9, y: 5 }]; // Place snake at the edge
             const result = game.moveSnake('E');
             expect(result).toBe(false);
-            expect(game.hasCollided).toBe(true);
+            expect(game.gameOver).toBe(true);
         });
 
-        it('should set hasCollided to true if the snake collides with itself', () => {
+        it('should set gameOver to true if the snake collides with itself', () => {
             game.snake.body = [
                 { x: 5, y: 5 },
                 { x: 5, y: 6 },
@@ -81,7 +83,7 @@ describe('SnakeGame', () => {
             ];
             const result = game.moveSnake('E');
             expect(result).toBe(false);
-            expect(game.hasCollided).toBe(true);
+            expect(game.gameOver).toBe(true);
         });
     });
 

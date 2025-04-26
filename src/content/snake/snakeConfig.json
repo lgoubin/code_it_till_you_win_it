@@ -5,34 +5,69 @@
     "levels": [
         {
             "id": 1,
-            "title": "Premiers pas",
-            "instructions": "Fais avancer le serpent d’une case.",
-            "starterCode": "def nextMove(): \n    direction = 'N' \n    return direction",
+            "title": "Premier pas",
+            "sousTitre": "Fais avancer le serpent d’une case vers le bas.",
+            "instructions": "La fonction next_move() doit renvoyer la direction S (bas), parmi les directions possibles : N (haut), S (bas), E (droite) et W (gauche).",
+            "starterCode": "def next_move(): \n    direction = 'X' # X n'est pas une direction valide, quelle serait la bonne direction ?\n    return direction",
             "gameConfig": {
-                "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": [{ "x": 5, "y": 5 }],
-                "maxSteps": 1
+                "gridSize": { "width": 10, "height": 5 },
+                "initialSnake": [{ "x": 3, "y": 2}, { "x": 3, "y": 1}, { "x": 3, "y": 0}],
+                "enableApple": false,
+               "maxSteps": 1
             },
-            "popup": "On sait faire bouger le serpent ! \n Le risque à présent est de foncer dans un mur ou de se cogner contre lui-même. \n On va donc devoir réfléchir à la direction à prendre pour éviter cela."
+            "popup": "On sait faire bouger le serpent ! \n Essayons de lui faire faire un pas dans une direction aléatoire."
         },
         {
             "id": 2,
-            "title": "Évite la mort",
-            "instructions": "Dans ce niveau, le serpent ne cherche pas la pomme, juste à rester en vie. Fais en sorte qu’il ne se cogne pas contre un mur ou contre lui-même.",
-            "starterCode": "def nextMove(): \n    direction = 'E' \n    return direction",
+            "title": "Premier choix aléatoire",
+            "sousTitre": "Fais avancer le serpent d’une case dans une direction choisie aléatoirement.",
+            "instructions": "La fonction next_move() doit renvoyer une direction au hasard parmi : N pour le haut, S pour le bas, E pour la droite et W pour la gauche. Complète la liste directions_valides et l’appel à random.choice() pour sélectionner une direction au hasard parmi les quatre directions.",
+            "starterCode": "def next_move():\n    directions_valides = ['N', ...] # Complète la liste\n    direction_aleatoire = random.choice() # Complète entre les parenthèses\n    return direction_aleatoire",
+            "hiddenCode": "import random",
             "gameConfig": {
-                "gridSize": { "width": 20, "height": 10 },
-                "initialSnake": [{ "x": 0, "y": 0 }],
-                "maxSteps": 10
+              "gridSize": { "width": 10, "height": 5 },
+              "initialSnake": [{ "x": 3, "y": 2}, { "x": 3, "y": 1}, { "x": 3, "y": 0}],
+              "enableApple": false,
+              "maxSteps": 1
             },
-            "popup": "Le serpent sait éviter les murs !\n Mais il commence à avoir faim... \n Il va falloir lui apprendre à chercher la nourriture."
+            "popup": "Bravo ! Tu sais désormais faire un choix aléatoire.\nÀ partir de maintenant, nous allons faire plusieurs pas d'affilé, toujours aléatoires. Cependant, il ne va pas falloir pas foncer dans un mur !\nRéfléchir avant d'agir sera essentiel !"
         },
         {
             "id": 3,
+            "title": "Éviter les murs",
+            "sousTitre": "Ton but est de choisir une direction au hasard parmi celles qui ne mènent pas à un mur.",
+            "instructions": "Pour cela, utilise la fonction 'is_wall(direction)' fournie, qui retourne True si la direction ferait percuter un mur, sinon False.",
+            "starterCode": "def next_move():\n    directions_valides = ['N', 'E', 'S', 'W']\n    direction_aleatoire = random.choice(directions_valides)\n    # Tant que cette direction mène à un mur, choisis-en une nouvelle\n    while (is_wall() == X): # Complète entre les parenthèses et remplace X part la bonne valeur (True ou False ?)\n        direction_aleatoire = random.choice(  ) # Complète entre les parenthèses\n    return direction_aleatoire",
+            "hiddenCode": "import random\nhead = snakeBody[0]\ndef is_wall(direction):\n    if direction == 'N':\n        return head.y == 0\n    elif direction == 'S':\n        return head.y == gridSize['height'] - 1\n    elif direction == 'E':\n        return head.x == gridSize['width'] - 1\n    elif direction == 'W':\n        return head.x == 0\n    return False",
+            "gameConfig": {
+                "gridSize": { "width": 10, "height": 5 },
+                "initialSnake": [{ "x": 3, "y": 2}, { "x": 3, "y": 1}, { "x": 3, "y": 0}],
+                "enableApple": false,
+                "maxSteps": 15
+            },
+            "popup": "Bravo ! Tu sais maintenant éviter les murs. Maintenant, tu vas compléter la fonction is_wall(direction) pour que le serpent puisse choisir une direction qui ne l'amène pas dans un mur. Bonne chance !"
+        },
+        {
+            "id": 4,
+            "title": "Implémenter la fonction 'is_wall()'",
+            "sousTitre": "Ton objectif est maintenant de compléter la fonction 'is_wall(direction)'.",
+            "instructions": "Cette fonction doit retourner True si la direction donnée entraîne une collision avec un mur. Sinon, elle doit retourner False.\nUtilise les valeurs de la position du serpent (tete.x donne la position sur l'axe horizontal, tete.y donne la position sur l'axe vertical, le coin en haut à gauche est (0,0)) et de la taille de la grille (grille_hauteur et grille_largeur) pour déterminer si une direction donnée causerait une collision entre les murs et la tête du serpent.",
+            "starterCode": "def next_move():\n    directions_valides = ['N', 'E', 'S', 'W']\n    direction_aleatoire = random.choice(directions_valides)\n    while (is_wall(direction_aleatoire) == True):\n        direction_aleatoire = random.choice(directions_valides)\n    return direction_aleatoire\n\ndef is_wall(direction):\n    if direction == 'N':\n        return tete.y == 0\n    elif direction == 'E':\n        return tete.x == grid_largeur - 1\n    elif direction == 'S':\n        return tete.y== # Complète ici\n    elif direction == 'W':\n        return tete.x == # Complète ici\n    return False",
+            "hiddenCode": "import random\ntete = snakeBody[0]\n grille_hauteur = gridSize['height']\n grille_largeur = gridSize['width']",
+            "gameConfig": {
+                "gridSize": { "width": 10, "height": 5 },
+                "initialSnake": [{ "x": 3, "y": 2}, { "x": 3, "y": 1}, { "x": 3, "y": 0}],
+                "enableApple": false,
+                "maxSteps": 15
+            },
+            "popup": "Bravo ! Maintenant que tu sais parfaitement éviter les murs, tu es prêt à manger des pommes !\n D'ailleurs, le serpent est affamé !\n Aide le à rejoindre la pomme avec le moins de pas possible."
+        },       
+        {
+            "id": 5,
             "title": "Collecte de nourriture",
-            "instructions": "Le serpent commence à avoir faim ! Guide le vers la pomme en tentant de le garder en vie.",
+            "instructions": "Le serpent commence à avoir faim ! Guide le vers la pomme en le moins de pas possible et bien sûr, sans qu'il se cogne contre un mur !",
             "starterCode": "def nextMove(): \n    direction = 'S' \n    return direction",
-            "validatorCode": "hasEaten",
+            "stopCondition": "hasEaten",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
                 "initialSnake": [{ "x": 5, "y": 5 }]
@@ -40,11 +75,11 @@
             "popup": "Le serpent a bien mangé ! Ce qui l'a tellement fait grandir qu'il s'est cogné contre lui-même ! \n Afin d'éviter cela, on peut essayer de faire en sorte qu'il emplisse autant d'espace sur le plateau que possible. \n Pour cela, nous allons mettre en place un algorithme dit 'Cycle Hamiltonien' ou A* : le serpent doit se déplacer de manière à visiter chaque case du plateau avant de revenir à sa position initiale. \n Nécessairement, au cours d'un cycle, il aura mangé au moins une pomme. \n Il doit évidemment continuer à éviter les murs."
         },
         {
-            "id": 4,
+            "id": 6,
             "title": "Cycle hamiltonien",
             "instructions": "Le serpent doit se déplacer de manière à visiter chaque case du plateau avant de revenir à sa position initiale. Il doit éviter de se croiser lui-même.",
             "starterCode": "def nextMove(): \n    direction = 'W' \n    return direction",
-            "validatorCode": "hasCompletedHamiltonienCycle",
+            "stopCondition": "hasCompletedHamiltonienCycle",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
                 "initialSnake": [{ "x": 5, "y": 5 }]
@@ -52,11 +87,11 @@
             "popup": "On a réussi à manger tellement de pommes que le serpent rempli tout l'espace du plateau !\nC'était un peu long et ennuyant cependant...\nPourrions-nous rendre ce serpent un peu plus \"intelligent\" ? "
         },
         {
-            "id": 5,
+            "id": 7,
             "title": "Recherche du meilleur chemin",
-            "instructions": "Gagnons un peu de temps ! Allons manger la pomme tant que cela ne nous met pas en danger, et utilisons un chemin plus long pour se mettre en sécurité quand un dangr est détecté.",
+            "instructions": "Gagnons un peu de temps ! Allons manger la pomme tant que cela ne nous met pas en danger, et utilisons un chemin plus long pour se mettre en sécurité quand un dange   , r est détecté.",
             "starterCode": "def nextMove(): \n    direction = 'N' \n    return direction",
-            "validatorCode": "hasFoundShortestPath",
+            "stopCondition": "hasFoundShortestPath",
             "gameConfig": {
                 "gridSize": { "width": 20, "height": 10 },
                 "initialSnake": [{ "x": 5, "y": 5 }]

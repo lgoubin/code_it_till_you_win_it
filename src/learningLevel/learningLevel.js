@@ -1,9 +1,11 @@
 export class LearningLevel {
-    constructor({ id, title, instructions, starterCode, stopCondition, gameConfig, popup }, gameType) {
+    constructor({ id, title, sousTitre, instructions, starterCode, hiddenCode,stopCondition, gameConfig, popup }, gameType) {
         this.id = id;
         this.title = title;
+        this.sousTitre = sousTitre;
         this.instructions = instructions;
         this.starterCode = starterCode;
+        this.hiddenCode = hiddenCode;
         this.stopCondition = stopCondition;
         this.gameType = gameType;
         this.gameConfig = gameConfig;

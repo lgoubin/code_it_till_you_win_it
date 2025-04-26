@@ -26,8 +26,8 @@ describe('runLevel', () => {
         const pyodideInstance = {};
 
         executePythonMoveLoop.mockImplementation(
-            (pyodide, game, level, code, gameState, onDirection) => {
-                onDirection('RIGHT'); // simulate movement
+            (pyodide, game, level, code, onDirection) => {
+                onDirection('S'); // simulate movement
                 return Promise.resolve({ success: true });
             }
         );
@@ -35,7 +35,7 @@ describe('runLevel', () => {
         await runLevel(context, pyodideInstance);
 
         expect(executePythonMoveLoop).toHaveBeenCalled();
-        expect(context.game.moveSnake).toHaveBeenCalledWith('RIGHT');
+        expect(context.game.moveSnake).toHaveBeenCalledWith('S');
         expect(updateTerminal).toHaveBeenCalled();
         expect(displayFeedback).toHaveBeenCalled();
     });

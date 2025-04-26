@@ -10,23 +10,31 @@ class TestLevel2(unittest.TestCase):
 
     def test_direction_validity(self):
         direction = nextMove()
-        self.assertIn(direction, valid_directions, f"'{direction}' n’est pas une direction valide ({valid_directions}).")
+        self.assertIn(direction, valid_directions, f"'{direction}' n’est pas une direction valide ({valid_directions}).")        
 
     
 
 def run_tests():
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestLevel2)
-    runner = unittest.TextTestRunner()
-    result = runner.run(suite)
+    test_case = TestLevel2
+
+    loader = unittest.TestLoader()
+    test_names = loader.getTestCaseNames(test_case)
+
+    result = unittest.TestResult()
+    for name in test_names:
+        test = test_case(name)
+        test.run(result)
+        if not result.wasSuccessful():
+            break  # Stop on first failure
 
     failures = []
-    for test_case, traceback in result.failures:
+    for test_case, traceback in result.failures + result.errors:
         last_line = traceback.strip().split("\n")[-1]
         message = last_line.split(": ", 1)[-1]
         failures.append(f"{message}")
 
     return {
         "success": result.wasSuccessful(),
-        "message": "✔ Tous les tests passés" if result.wasSuccessful() else f"✘ {len(result.failures)} échec(s)",
+        "message": "✔ Tous les tests passés" if result.wasSuccessful() else "✘ Échec",
         "failures": failures
     }

@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
-    "electron": "electron .",
+    "dev:level": "concurrently \"vite --mode level\" \"wait-on http://localhost:5173 && electron .\"",
     "start": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "test": "jest"
   },

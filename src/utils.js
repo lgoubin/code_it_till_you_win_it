@@ -25,7 +25,8 @@ export function resizeTerminal(terminal, container) {
 
 export function updateGameDisplay(context) {
     context.ui.levelTitle.textContent = context.learningGame.currentLevel.title;
-    context.ui.levelDescription.textContent = context.learningGame.currentLevel.instructions;
+    context.ui.levelObjective.textContent = context.learningGame.currentLevel.sousTitre;
+    context.ui.levelInstructions.textContent = context.learningGame.currentLevel.instructions;
 }
 
 export function resetGameContainer(context) {
@@ -59,7 +60,8 @@ export function displayFeedback(ui, level, result) {
         level.markAsSucceeded();
     } else {
         ui.feedbackPopup.querySelector('h2').textContent = "Oups !";
-        ui.feedbackPopup.querySelector('p').textContent =  result.failures
+        ui.feedbackPopup.querySelector('p').textContent =  result.failures;
         ui.feedbackPopup.style.display = 'flex';
+        console.error(result.failures);
     }
 }
